@@ -5,20 +5,26 @@
 int main() {
 	int gdriver = DETECT, gmode, error;
 	initgraph(&gdriver, &gmode, "c:\\turboc3\\bgi");
-	int x, y, dx = 5, dy = 5, r = 5;
-	int fps = 5;
-	int padW = 36;
+	int x, y, padX, padY, dx = 1, dy = 1, r = 8;
+	int fps = 1;
+
+	int padW = 40;
 	int padH = 10;
 
-	int maxx = getmaxx();
-	int maxy = getmaxy() - r;
+	int moveX = padW;
 
-	int padX = (getmaxx()/2) - (padW/2);
-	int padY = getmaxy() - padH;
+	int maxx = getmaxx();
+	int maxy = getmaxy();
+
+	padX = maxx/2 - (padW/2);
+	padY = maxy - padH;
 
 	x = maxx/2;
-	y = maxy;
+	y = maxy - padH - r;
+
 	circle(x, y, r);
+	rectangle(padX, padY, padX+padW, padY+padH);
+	getch();
 	while(1) {
 		cleardevice();
 		printf("X: %d, Y:%d\n", x, y);
@@ -38,15 +44,20 @@ int main() {
 		if(kbhit()){
 			char c = getch();
 			if(c == 'a') {
-				padX -= 15;
+				if(x-moveX > 0) {
+					padX -= moveX;
+				}
 			}
 			else if(c == 'd') {
-				padX += 15;
+				if(x+moveX < maxx) {
+					padX += 15;
+				}
 			}
-		}
+        }
 
 		delay(fps);
 	}
-	getch();
+ 	getch();
 	return 0;
 }
+
